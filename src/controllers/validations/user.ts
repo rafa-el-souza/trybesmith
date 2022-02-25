@@ -11,7 +11,7 @@ const e: UserError = {
   noUsername: { error: 'Username is required' },
   usernameNotString: { error: 'Username must be a string' },
   shortUsername: { error: 'Username must be longer than 2 characters' },
-  noClasse: { error: 'classe is required' },
+  noClasse: { error: 'Classe is required' },
   classeNotString: { error: 'Classe must be a string' },
   shortClasse: { error: 'Classe must be longer than 2 characters' },
   noLevel: { error: 'Level is required' },
@@ -55,7 +55,7 @@ export default {
   },
   hasLevel: (req: Request, res: Response, next: NextFunction) => {
     const newUser: NewUser = req.body;
-    if (!newUser.level) return res.status(400).json(e.noLevel);
+    if (!newUser.level && newUser.level !== 0) return res.status(400).json(e.noLevel);
     next();
   },
   levelIsNumber: (req: Request, res: Response, next: NextFunction) => {
