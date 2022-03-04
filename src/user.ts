@@ -5,7 +5,7 @@ import userController from './controllers/user';
 
 import userValidations from './controllers/validations/user';
 
-const { subscription } = userController;
+const { subscription, login } = userController;
 
 const {
   hasUsername,
@@ -39,6 +39,13 @@ router.post(
   passwordIsString,
   passwordNotShort,
   subscription,
+);
+
+router.post(
+  '/login',
+  hasUsername,
+  hasPassword,
+  login,
 );
 
 export default router;

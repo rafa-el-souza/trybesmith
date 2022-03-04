@@ -27,3 +27,13 @@ export interface UserErrors{
   passwordNotString: Error,
   shortPassword: Error,
 }
+
+export interface Credentials{
+  username: string,
+  password: string
+}
+
+export interface LoginPayload{
+  id: number,
+  username: string
+}
