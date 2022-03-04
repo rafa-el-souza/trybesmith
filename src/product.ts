@@ -39,6 +39,6 @@ router.get(
   hasToken,
   isLoggedIn,
   getAll,
-)
+);
 
 export default router;
