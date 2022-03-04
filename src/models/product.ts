@@ -11,4 +11,6 @@ export default {
     return connection.execute(q.createProductQuery, [name, amount])
       .then(([result]) => ({ item: { id: (result as OkPacket).insertId, name, amount } })); // Refactor
   },
+  getAll: () => connection.execute(q.getAllProductsQuery)
+    .then(([result]) => result),
 };

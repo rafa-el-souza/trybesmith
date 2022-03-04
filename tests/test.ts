@@ -395,7 +395,7 @@ describe("4 - Crie um endpoint para a listagem de produtos", () => {
     expect(result.body.error).toEqual("Token not found");
   });
 
-  it.skip('Será validado que não é possível listar todos os produtos com um token inválido', async () => {
+  it('Será validado que não é possível listar todos os produtos com um token inválido', async () => {
     const result = await request(app).get("/products").set("Authorization", "Bearer 123");
 
     expect(result.statusCode).toEqual(401);
@@ -403,7 +403,7 @@ describe("4 - Crie um endpoint para a listagem de produtos", () => {
   });
 
 
-  it.skip('Será validado que é possível listar todos os produtos com sucesso', async () => {
+  it('Será validado que é possível listar todos os produtos com sucesso', async () => {
     const result = await request(app).get("/products").set("Authorization", token);
 
     expect(result.statusCode).toEqual(200);

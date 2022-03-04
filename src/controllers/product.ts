@@ -11,4 +11,8 @@ export default {
     productService.create(newProduct)
       .then((result) => res.status(201).json(result));
   },
+  getAll: (req: Request, res: Response) => {
+    productService.getAll()
+      .then((result) => res.status(200).json(result));
+  },
 };

@@ -12,4 +12,8 @@ export default {
     INSERT INTO Trybesmith.Products (name, amount)
     VALUES (?, ?);
   `,
+  getAllProductsQuery: `
+    SELECT id, name, amount
+    FROM Trybesmith.Products;
+  `,
 };

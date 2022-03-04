@@ -6,7 +6,7 @@ import productValidations from './controllers/validations/product';
 
 import userValidations from './controllers/validations/user';
 
-const { create } = productController;
+const { create, getAll } = productController;
 
 const { hasToken, isLoggedIn } = userValidations;
 
@@ -33,5 +33,12 @@ router.post(
   amountNotShort,
   create,
 );
+
+router.get(
+  '/products',
+  hasToken,
+  isLoggedIn,
+  getAll,
+)
 
 export default router;

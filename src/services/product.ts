@@ -6,4 +6,5 @@ import productModel from '../models/product';
 
 export default {
   create: (newProduct: NewProduct) => productModel.create(newProduct),
+  getAll: () => productModel.getAll(),
 };
