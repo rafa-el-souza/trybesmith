@@ -13,7 +13,7 @@ export interface Error{
   error: string
 }
 
-export interface UserError{
+export interface UserErrors{
   noUsername: Error,
   usernameNotString: Error,
   shortUsername: Error,

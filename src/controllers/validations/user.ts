@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { NewUser, UserError } from '../../interfaces/user';
+import { NewUser, UserErrors } from '../../interfaces/user';
 
 const isNotString = (input: string) => typeof input !== 'string';
 const isShort = (input: string, limit: number) => input.length <= limit;
 const isNotNumber = (input: number) => typeof input !== 'number';
 const isNotPositive = (input: number) => input <= 0;
 
-const e: UserError = {
+const e: UserErrors = {
   noUsername: { error: 'Username is required' },
   usernameNotString: { error: 'Username must be a string' },
   shortUsername: { error: 'Username must be longer than 2 characters' },
