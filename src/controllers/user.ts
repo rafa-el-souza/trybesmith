@@ -4,17 +4,24 @@ import jwt from 'jsonwebtoken';
 
 import 'dotenv/config';
 
-import { Credentials, LoginPayload, NewUser, NewUserPayload } from '../interfaces/user';
+import {
+  Credentials,
+  LoginPayload,
+  NewUser,
+  NewUserPayload,
+  NewUserResponse,
+} from '../interfaces/user';
 
 import userService from '../services/user';
 
 export default {
   subscription: (req: Request, res: Response) => {
     const newUser: NewUser = req.body;
+    const newUserResponse: NewUserResponse = { username: newUser.username };
     userService.subscription(newUser)
       .then((result) => {
         const secret: string = process.env.JWT_SECRET || 'secret'; // Refactor
-        const payload: NewUserPayload = { ...newUser, ...result };
+        const payload: NewUserPayload = { ...newUserResponse, ...result };
         const token: string = jwt.sign(payload, secret, { algorithm: 'HS256' });
         return res.status(201).json({ token });
       });

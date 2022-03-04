@@ -1,19 +1,27 @@
-export interface NewUser{
+// import { IncomingHttpHeaders } from 'http';
+
+import { IncomingHttpHeaders } from 'http';
+
+export interface NewUser {
   username: string,
   classe: string,
   level: number,
   password: string,
 }
 
-export interface NewUserPayload extends NewUser{
-  id: number
+export interface NewUserResponse {
+  username: string,
 }
 
-export interface Error{
+export interface NewUserPayload extends NewUserResponse {
+  id: number,
+}
+
+export interface Error {
   error: string
 }
 
-export interface UserErrors{
+export interface UserErrors {
   noUsername: Error,
   usernameNotString: Error,
   shortUsername: Error,
@@ -26,14 +34,24 @@ export interface UserErrors{
   noPassword: Error,
   passwordNotString: Error,
   shortPassword: Error,
+  notToken: Error,
+  invalidToken: Error
 }
 
-export interface Credentials{
+export interface Credentials {
   username: string,
   password: string
 }
 
-export interface LoginPayload{
+export interface LoginPayload {
   id: number,
   username: string
+}
+
+export interface Header extends IncomingHttpHeaders {
+  authorization: string
+}
+
+export interface UpdatedRequest extends Request {
+  decoded: string
 }

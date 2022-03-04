@@ -8,4 +8,8 @@ export default {
     FROM Trybesmith.Users
       WHERE username = ? AND password = ?;
   `,
+  createProductQuery: `
+    INSERT INTO Trybesmith.Products (name, amount)
+    VALUES (?, ?);
+  `,
 };

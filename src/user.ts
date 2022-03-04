@@ -1,4 +1,3 @@
-// import express, { Request, Response, NextFunction } from 'express';
 import express from 'express';
 
 import userController from './controllers/user';
