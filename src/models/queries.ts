@@ -16,4 +16,13 @@ export default {
     SELECT id, name, amount
     FROM Trybesmith.Products;
   `,
+  createOrderQuery: `
+    INSERT INTO Trybesmith.Orders (userId)
+    VALUES (?);
+  `,
+  updateProductQuery: `
+    UPDATE Trybesmith.Products
+    SET Products.orderId = ?
+      WHERE Products.id = ?;
+  `,
 };
