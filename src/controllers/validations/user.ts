@@ -114,7 +114,7 @@ export default {
         secret,
         { algorithms: ['HS256'] },
       );
-      console.log(decoded);
+      req.body = { ...req.body, decoded };
     } catch (err) {
       return res.status(401).json(e.invalidToken);
     }
