@@ -1,15 +1,11 @@
 /* eslint-disable max-lines-per-function */
 import { NextFunction, Request, Response } from 'express';
 import { IncomingHttpHeaders } from 'http';
-
 import jwt from 'jsonwebtoken';
 
-import { Header, NewUser, UserErrors } from '../../interfaces/user';
+import { isNotNumber, isNotPositive, isNotString, isShort } from '../../helpers';
 
-const isNotString = (input: string) => typeof input !== 'string';
-const isShort = (input: string, limit: number) => input.length <= limit;
-const isNotNumber = (input: number) => typeof input !== 'number';
-const isNotPositive = (input: number) => input <= 0;
+import { Header, NewUser, UserErrors } from '../../interfaces/user';
 
 const e: UserErrors = { // Refactor
   noUsername: { error: 'Username is required' },
@@ -28,96 +24,115 @@ const e: UserErrors = { // Refactor
   invalidToken: { error: 'Invalid token' },
 };
 
+export const hasUsername = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (!newUser.username) return res.status(400).json(e.noUsername);
+  return next();
+};
+
+export const usernameIsString = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (isNotString(newUser.username)) return res.status(422).json(e.usernameNotString);
+  return next();
+};
+
+export const usernameNotShort = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (isShort(newUser.username, 2)) return res.status(422).json(e.shortUsername);
+  return next();
+};
+
+export const hasClasse = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (!newUser.classe) return res.status(400).json(e.noClasse);
+  return next();
+};
+
+export const classeIsString = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (isNotString(newUser.classe)) return res.status(422).json(e.classeNotString);
+  return next();
+};
+
+export const classeNotShort = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (isShort(newUser.classe, 2)) return res.status(422).json(e.shortClasse);
+  return next();
+};
+
+export const hasLevel = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (!newUser.level && newUser.level !== 0) return res.status(400).json(e.noLevel);
+  return next();
+};
+
+export const levelIsNumber = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (isNotNumber(newUser.level)) return res.status(422).json(e.levelNotNumber);
+  return next();
+};
+
+export const levelIsPositive = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (isNotPositive(newUser.level)) return res.status(422).json(e.levelNotPositive);
+  return next();
+};
+
+export const hasPassword = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (!newUser.password) return res.status(400).json(e.noPassword);
+  return next();
+};
+
+export const passwordIsString = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (isNotString(newUser.password)) return res.status(422).json(e.passwordNotString);
+  return next();
+};
+
+export const passwordNotShort = (req: Request, res: Response, next: NextFunction) => {
+  const newUser: NewUser = req.body;
+  if (isShort(newUser.password, 7)) return res.status(422).json(e.shortPassword);
+  return next();
+};
+
+export const hasToken = (req: Request, res: Response, next: NextFunction) => {
+  const header = req.headers;
+  const { authorization } = header;
+  if (!authorization) return res.status(401).json(e.notToken);
+  return next();
+};
+
+export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
+  const header: IncomingHttpHeaders = req.headers;
+  const { authorization } = header as Header;
+  const secret: string = process.env.JWT_SECRET || 'secret'; // Refactor
+  try {
+    const decoded = jwt.verify(
+      authorization,
+      secret,
+      { algorithms: ['HS256'] },
+    );
+    req.body = { ...req.body, decoded };
+  } catch (err) {
+    return res.status(401).json(e.invalidToken);
+  }
+  return next();
+};
+
 export default {
-  hasUsername: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (!newUser.username) return res.status(400).json(e.noUsername);
-    return next();
-  },
-  usernameIsString: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (isNotString(newUser.username)) return res.status(422).json(e.usernameNotString);
-    return next();
-  },
-  usernameNotShort: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (isShort(newUser.username, 2)) return res.status(422).json(e.shortUsername);
-    return next();
-  },
-  hasClasse: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (!newUser.classe) return res.status(400).json(e.noClasse);
-    return next();
-  },
-  classeIsString: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (isNotString(newUser.classe)) return res.status(422).json(e.classeNotString);
-    return next();
-  },
-  classeNotShort: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (isShort(newUser.classe, 2)) return res.status(422).json(e.shortClasse);
-    return next();
-  },
-  hasLevel: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (!newUser.level && newUser.level !== 0) return res.status(400).json(e.noLevel);
-    return next();
-  },
-  levelIsNumber: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (isNotNumber(newUser.level)) return res.status(422).json(e.levelNotNumber);
-    return next();
-  },
-  levelIsPositive: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (isNotPositive(newUser.level)) return res.status(422).json(e.levelNotPositive);
-    return next();
-  },
-  hasPassword: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (!newUser.password) return res.status(400).json(e.noPassword);
-    return next();
-  },
-  passwordIsString: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (isNotString(newUser.password)) return res.status(422).json(e.passwordNotString);
-    return next();
-  },
-  passwordNotShort: (req: Request, res: Response, next: NextFunction) => {
-    const newUser: NewUser = req.body;
-    if (isShort(newUser.password, 7)) return res.status(422).json(e.shortPassword);
-    return next();
-  },
-  hasToken: (req:Request, res: Response, next: NextFunction) => {
-    const header = req.headers;
-    const { authorization } = header;
-    if (!authorization) return res.status(401).json(e.notToken);
-    return next();
-  },
-  isLoggedIn: (req: Request, res: Response, next: NextFunction) => {
-    const header: IncomingHttpHeaders = req.headers;
-    const { authorization } = header as Header;
-    const secret: string = process.env.JWT_SECRET || 'secret'; // Refactor
-    // const decoded = jwt.verify(
-    //   authorization, 
-    //   secret, 
-    //   { algorithms: ['HS256'] },
-    //   (err, payload) => {
-    //     if (err) return res.status(401).json(e.invalidToken);
-    //     return payload;
-    //   },
-    // );
-    try {
-      const decoded = jwt.verify(
-        authorization,
-        secret,
-        { algorithms: ['HS256'] },
-      );
-      req.body = { ...req.body, decoded };
-    } catch (err) {
-      return res.status(401).json(e.invalidToken);
-    }
-    return next();
-  },
+  hasUsername,
+  usernameIsString,
+  usernameNotShort,
+  hasClasse,
+  classeIsString,
+  classeNotShort,
+  hasLevel,
+  levelIsNumber,
+  levelIsPositive,
+  hasPassword,
+  passwordIsString,
+  passwordNotShort,
+  hasToken,
+  isLoggedIn,
 };

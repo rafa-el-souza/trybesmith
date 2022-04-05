@@ -1,10 +1,12 @@
-// import { NewUser, Credentials } from '../interfaces/user';
-
 import { NewProduct } from '../interfaces/product';
 
 import productModel from '../models/product';
 
+export const createProduct = (newProduct: NewProduct) => productModel.create(newProduct);
+
+export const getAllProducts = () => productModel.getAll();
+
 export default {
-  create: (newProduct: NewProduct) => productModel.create(newProduct),
-  getAll: () => productModel.getAll(),
+  createProduct,
+  getAllProducts,
 };

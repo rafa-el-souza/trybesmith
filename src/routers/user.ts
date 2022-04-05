@@ -1,12 +1,8 @@
 import express from 'express';
 
-import userController from './controllers/user';
+import { subscription, login } from '../controllers';
 
-import userValidations from './controllers/validations/user';
-
-const { subscription, login } = userController;
-
-const {
+import {
   hasUsername,
   usernameIsString,
   usernameNotShort,
@@ -18,12 +14,11 @@ const {
   levelIsNumber,
   hasPassword,
   passwordIsString,
-  passwordNotShort,
-} = userValidations;
+  passwordNotShort } from '../controllers/validations';
 
-const router = express.Router();
+const userRouter = express.Router();
 
-router.post(
+userRouter.post(
   '/users',
   hasUsername,
   usernameIsString,
@@ -40,11 +35,12 @@ router.post(
   subscription,
 );
 
-router.post(
+userRouter.post(
   '/login',
   hasUsername,
   hasPassword,
   login,
 );
 
-export default router;
+export { userRouter };
+export default userRouter;

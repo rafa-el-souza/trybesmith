@@ -1,5 +1,10 @@
 import orderModel from '../models/order';
 
+export const createOrder = (
+  products: number[],
+  userId: number,
+) => orderModel.create(products, userId);
+
 export default {
-  create: (products: number[], userId: number) => orderModel.create(products, userId),
+  createOrder,
 };

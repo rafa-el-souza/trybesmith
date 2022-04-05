@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 
-import orderService from '../services/order';
+import { createOrder as serviceCreateOrder } from '../services';
+
+export const createOrder = (req: Request, res: Response) => {
+  const { products, decoded } = req.body;
+  serviceCreateOrder(products, decoded.id)
+    .then((result) => res.status(201).json(result));
+};
 
 export default {
-  create: (req: Request, res: Response) => {
-    const { products, decoded } = req.body;
-    orderService.create(products, decoded.id)
-      .then((result) => res.status(201).json(result));
-  },
+  createOrder,
 };
