@@ -1,4 +1,4 @@
-import { NewUser, Credentials } from '../interfaces/user';
+import { NewUser, Credentials } from '../interfaces';
 
 import userModel from '../models/user';
 

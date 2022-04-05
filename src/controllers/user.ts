@@ -12,12 +12,15 @@ import {
   NewUserResponse,
 } from '../interfaces/user';
 
-import userService from '../services/user';
+import {
+  subscription as serviceSubscription,
+  login as serviceLogin,
+} from '../services';
 
 export const subscription = (req: Request, res: Response) => {
   const newUser: NewUser = req.body;
   const newUserResponse: NewUserResponse = { username: newUser.username };
-  userService.subscription(newUser)
+  serviceSubscription(newUser)
     .then((result) => {
       const secret: string = process.env.JWT_SECRET || 'secret'; // Refactor
       const payload: NewUserPayload = { ...newUserResponse, ...result };
@@ -28,7 +31,7 @@ export const subscription = (req: Request, res: Response) => {
 
 export const login = (req: Request, res: Response) => {
   const credentials: Credentials = req.body;
-  userService.login(credentials)
+  serviceLogin(credentials)
     .then((result) => {
       if (!result[0]) return res.status(401).json({ error: 'Username or password invalid' });
       const secret: string = process.env.JWT_SECRET || 'secret'; // Refactor
