@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import { NextFunction, Request, Response } from 'express';
 import { IncomingHttpHeaders } from 'http';
 import jwt from 'jsonwebtoken';
