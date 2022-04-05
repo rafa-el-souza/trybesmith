@@ -1,19 +1,22 @@
-import { ResultSetHeader, FieldPacket } from 'mysql2/promise';
+import { PrismaClient } from '@prisma/client';
 
-import connection from './connection';
-import q from './queries';
+const prisma = new PrismaClient();
 
-type UpdateProductPromise = Promise<[ResultSetHeader, FieldPacket[]]>;
+export const create = async (_products: number[], userId: number) => {
+  const { id: orderId } = await prisma.orders.create({
+    data: { userId },
+    select: { id: true },
+  });
+  return prisma.products.updateMany({ // refactor transaction
+    where: { id: { in: _products } },
+    data: { orderId },
+  })
+    .then(() => ({ order: { userId, products: _products } }))
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+};
 
 export default {
-  create: async (products: number[], userId: number) => {
-    const createOrder: [ResultSetHeader, FieldPacket[]] = await connection
-      .execute(q.createOrderQuery, [userId]);
-    const orderId = createOrder[0].insertId;
-    const promises = products
-      .map((productId): UpdateProductPromise => connection
-        .execute(q.updateProductQuery, [orderId, productId]));
-    return Promise.all(promises)
-      .then(() => ({ order: { userId, products } }));
-  },
+  create,
 };

@@ -33,9 +33,9 @@ export const login = (req: Request, res: Response) => {
   const credentials: Credentials = req.body;
   serviceLogin(credentials)
     .then((result) => {
-      if (!result[0]) return res.status(401).json({ error: 'Username or password invalid' });
+      if (!result) return res.status(401).json({ error: 'Username or password invalid' });
       const secret: string = process.env.JWT_SECRET || 'secret'; // Refactor
-      const payload: LoginPayload = result[0];
+      const payload: LoginPayload = result;
       const token: string = jwt.sign(payload, secret, { algorithm: 'HS256' });
       return res.status(200).json({ token });
     });

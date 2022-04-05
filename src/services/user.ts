@@ -1,10 +1,13 @@
 import { NewUser, Credentials } from '../interfaces';
 
-import userModel from '../models/user';
+import {
+  subscription as modelSubscription,
+  login as modelLogin,
+} from '../models';
 
-export const subscription = (newUser: NewUser) => userModel.subscription(newUser);
+export const subscription = (newUser: NewUser) => modelSubscription(newUser);
 
-export const login = (credentials: Credentials) => userModel.login(credentials);
+export const login = (credentials: Credentials) => modelLogin(credentials);
 
 export default {
   subscription,

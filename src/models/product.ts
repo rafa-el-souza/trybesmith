@@ -1,16 +1,35 @@
-import { OkPacket } from 'mysql2';
-import { NewProduct } from '../interfaces/product';
-// import { Credentials, LoginPayload, NewUser } from '../interfaces/user';
+import { PrismaClient } from '@prisma/client';
 
-import connection from './connection';
-import q from './queries';
+import { NewProduct } from '../interfaces/product';
+
+const prisma = new PrismaClient();
+
+export const getAllProducts = () => prisma.products.findMany({
+  select: {
+    id: true,
+    name: true,
+    amount: true,
+  },
+})
+  .then((result) => result)
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+
+export const createProduct = ({ name, amount }: NewProduct) => prisma.products.create({
+  data: { name, amount },
+  select: {
+    id: true,
+    name: true,
+    amount: true,
+  },
+})
+  .then((result) => ({ item: { ...result } }))
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
 
 export default {
-  create: (newProduct: NewProduct) => {
-    const { name, amount } = newProduct;
-    return connection.execute(q.createProductQuery, [name, amount])
-      .then(([result]) => ({ item: { id: (result as OkPacket).insertId, name, amount } })); // Refactor
-  },
-  getAll: () => connection.execute(q.getAllProductsQuery)
-    .then(([result]) => result),
+  getAllProducts,
+  createProduct,
 };

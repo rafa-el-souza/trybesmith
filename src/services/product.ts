@@ -1,10 +1,13 @@
 import { NewProduct } from '../interfaces';
 
-import productModel from '../models/product';
+import {
+  getAllProducts as modelGetAllProducts,
+  createProduct as modelCreateProduct,
+} from '../models';
 
-export const createProduct = (newProduct: NewProduct) => productModel.create(newProduct);
+export const createProduct = (newProduct: NewProduct) => modelCreateProduct(newProduct);
 
-export const getAllProducts = () => productModel.getAll();
+export const getAllProducts = () => modelGetAllProducts();
 
 export default {
   createProduct,
