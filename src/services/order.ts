@@ -1,6 +1,7 @@
 import {
   createOrder as modelCreateOrder,
   getOrderById as modelGetOrderById,
+  getAllOrders as modelGetAllOrders,
 } from '../models';
 
 export const createOrder = (
@@ -11,6 +12,8 @@ export const createOrder = (
 export const getOrderById = (
   id: number,
 ) => modelGetOrderById(id);
+
+export const getAllOrders = () => modelGetAllOrders();
 
 export default {
   createOrder,

@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { createOrder, getOrderById } from '../controllers';
+import { createOrder, getAllOrders, getOrderById } from '../controllers';
 
 import {
   hasProducts,
@@ -27,6 +27,13 @@ orderRouter.get(
   isLoggedIn,
   orderExists,
   getOrderById,
+);
+
+orderRouter.get(
+  '/orders',
+  hasToken,
+  isLoggedIn,
+  getAllOrders,
 );
 
 export { orderRouter };

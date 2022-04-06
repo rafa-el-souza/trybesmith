@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
+import { formatOrder } from '../helpers';
+
 const prisma = new PrismaClient();
 
 export const createOrder = async (_products: number[], userId: number) => {
@@ -27,9 +29,20 @@ export const getOrderById = (id: number) => prisma.orders.findFirst({
 })
   .then((result) => {
     if (!result) return result;
-    const products = result?.products.map((product) => product.id);
-    return { ...result, products };
+    return formatOrder(result);
   })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+
+export const getAllOrders = () => prisma.orders.findMany({
+  include: {
+    products: {
+      select: { id: true },
+    },
+  },
+})
+  .then((result) => result.map(formatOrder))
   .finally(async () => {
     await prisma.$disconnect();
   });
