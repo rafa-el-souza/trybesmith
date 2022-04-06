@@ -2,7 +2,13 @@ import express from 'express';
 
 import { createOrder, getOrderById } from '../controllers';
 
-import { hasProducts, productsIsArray, hasToken, isLoggedIn } from '../middlewares/validations';
+import {
+  hasProducts,
+  productsIsArray,
+  hasToken,
+  isLoggedIn,
+  orderExists,
+} from '../middlewares/validations';
 
 const orderRouter = express.Router();
 
@@ -19,6 +25,7 @@ orderRouter.get(
   '/orders/:id',
   hasToken,
   isLoggedIn,
+  orderExists,
   getOrderById,
 );
 

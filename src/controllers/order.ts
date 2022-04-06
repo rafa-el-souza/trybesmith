@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 
 import {
   createOrder as serviceCreateOrder,
-  getOrderById as serviceGetOrderById,
 } from '../services';
 
 export const createOrder = (req: Request, res: Response) => {
@@ -11,11 +10,7 @@ export const createOrder = (req: Request, res: Response) => {
     .then((result) => res.status(201).json(result));
 };
 
-export const getOrderById = (req: Request, res: Response) => {
-  const { id } = req.params;
-  serviceGetOrderById(Number(id))
-    .then((result) => res.status(201).json(result));
-};
+export const getOrderById = (req: Request, res: Response) => res.status(200).json(res.locals.order);
 
 export default {
   createOrder,

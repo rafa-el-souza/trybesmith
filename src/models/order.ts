@@ -17,10 +17,19 @@ export const createOrder = async (_products: number[], userId: number) => {
     });
 };
 
-export const getOrderById = (id: number) => prisma.products.findFirst({
+export const getOrderById = (id: number) => prisma.orders.findFirst({
   where: { id },
+  include: {
+    products: {
+      select: { id: true },
+    },
+  },
 })
-  .then((result) => result)
+  .then((result) => {
+    if (!result) return result;
+    const products = result?.products.map((product) => product.id);
+    return { ...result, products };
+  })
   .finally(async () => {
     await prisma.$disconnect();
   });
