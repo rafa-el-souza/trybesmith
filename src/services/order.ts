@@ -1,10 +1,18 @@
-import orderModel from '../models/order';
+import {
+  createOrder as modelCreateOrder,
+  getOrderById as modelGetOrderById,
+} from '../models';
 
 export const createOrder = (
   products: number[],
   userId: number,
-) => orderModel.create(products, userId);
+) => modelCreateOrder(products, userId);
+
+export const getOrderById = (
+  id: number,
+) => modelGetOrderById(id);
 
 export default {
   createOrder,
+  getOrderById,
 };

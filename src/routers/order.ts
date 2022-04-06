@@ -1,8 +1,8 @@
 import express from 'express';
 
-import { createOrder } from '../controllers';
+import { createOrder, getOrderById } from '../controllers';
 
-import { hasProducts, productsIsArray, hasToken, isLoggedIn } from '../controllers/validations';
+import { hasProducts, productsIsArray, hasToken, isLoggedIn } from '../middlewares/validations';
 
 const orderRouter = express.Router();
 
@@ -13,6 +13,13 @@ orderRouter.post(
   hasProducts,
   productsIsArray,
   createOrder,
+);
+
+orderRouter.get(
+  '/orders/:id',
+  hasToken,
+  isLoggedIn,
+  getOrderById,
 );
 
 export { orderRouter };

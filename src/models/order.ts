@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const create = async (_products: number[], userId: number) => {
+export const createOrder = async (_products: number[], userId: number) => {
   const { id: orderId } = await prisma.orders.create({
     data: { userId },
     select: { id: true },
@@ -17,6 +17,15 @@ export const create = async (_products: number[], userId: number) => {
     });
 };
 
+export const getOrderById = (id: number) => prisma.products.findFirst({
+  where: { id },
+})
+  .then((result) => result)
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+
 export default {
-  create,
+  createOrder,
+  getOrderById,
 };
