@@ -9,7 +9,7 @@ import {
   hasAmount,
   amountIsString,
   amountNotShort,
-  hasToken, isLoggedIn } from '../controllers/validations';
+  hasToken, isLoggedIn } from '../middlewares/validations';
 
 const productRouter = express.Router();
 

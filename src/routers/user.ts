@@ -14,7 +14,7 @@ import {
   levelIsNumber,
   hasPassword,
   passwordIsString,
-  passwordNotShort } from '../controllers/validations';
+  passwordNotShort } from '../middlewares/validations';
 
 const userRouter = express.Router();
 
