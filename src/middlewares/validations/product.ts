@@ -2,45 +2,58 @@ import { NextFunction, Request, Response } from 'express';
 
 import { isNotString, isShort } from '../../helpers';
 
-import { INewProduct, IProductErrors } from '../../interfaces';
+import { INewProduct } from '../../interfaces';
 
-const e: IProductErrors = { // Refactor
-  noName: { error: 'Name is required' },
-  nameNotString: { error: 'Name must be a string' },
-  shortName: { error: 'Name must be longer than 2 characters' },
-  noAmount: { error: 'Amount is required' },
-  amountNotString: { error: 'Amount must be a string' },
-  shortAmount: { error: 'Amount must be longer than 2 characters' },
-};
+import { DomainError, Message, StatusCode } from '../../errors';
 
 export const hasName = (req: Request, res: Response, next: NextFunction) => {
   const newProduct: INewProduct = req.body;
-  if (!newProduct.name) return res.status(400).json(e.noName);
+  if (!newProduct.name) {
+    return next(
+      new DomainError(StatusCode.badRequest, Message.noName),
+    );
+  }
   return next();
 };
 export const nameIsString = (req: Request, res: Response, next: NextFunction) => {
   const newProduct: INewProduct = req.body;
-  if (isNotString(newProduct.name)) return res.status(422).json(e.nameNotString);
+  if (isNotString(newProduct.name)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.nameNotString),
+    );
+  }
   return next();
 };
 export const nameNotShort = (req: Request, res: Response, next: NextFunction) => {
   const newProduct: INewProduct = req.body;
-  if (isShort(newProduct.name, 2)) return res.status(422).json(e.shortName);
+  if (isShort(newProduct.name, 2)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.shortName),
+    );
+  }
   return next();
 };
 export const hasAmount = (req: Request, res: Response, next: NextFunction) => {
   const newProduct: INewProduct = req.body;
-  if (!newProduct.amount) return res.status(400).json(e.noAmount);
+  if (!newProduct.amount) return next(new DomainError(StatusCode.badRequest, Message.noAmount));
   return next();
 };
 export const amountIsString = (req: Request, res: Response, next: NextFunction) => {
   const newProduct: INewProduct = req.body;
-  if (isNotString(newProduct.amount)) return res.status(422).json(e.amountNotString);
+  if (isNotString(newProduct.amount)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.amountNotString),
+    );
+  }
   return next();
 };
 export const amountNotShort = (req: Request, res: Response, next: NextFunction) => {
   const newProduct: INewProduct = req.body;
-  if (isShort(newProduct.amount, 2)) return res.status(422).json(e.shortAmount);
+  if (isShort(newProduct.amount, 2)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.shortAmount),
+    );
+  }
   return next();
 };
 

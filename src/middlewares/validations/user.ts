@@ -4,101 +4,138 @@ import jwt from 'jsonwebtoken';
 
 import { isNotNumber, isNotPositive, isNotString, isShort } from '../../helpers';
 
-import { Header, NewUser, UserErrors } from '../../interfaces/user';
+import { Header, NewUser } from '../../interfaces';
 
-const e: UserErrors = { // Refactor
-  noUsername: { error: 'Username is required' },
-  usernameNotString: { error: 'Username must be a string' },
-  shortUsername: { error: 'Username must be longer than 2 characters' },
-  noClasse: { error: 'Classe is required' },
-  classeNotString: { error: 'Classe must be a string' },
-  shortClasse: { error: 'Classe must be longer than 2 characters' },
-  noLevel: { error: 'Level is required' },
-  levelNotNumber: { error: 'Level must be a number' },
-  levelNotPositive: { error: 'Level must be greater than 0' },
-  noPassword: { error: 'Password is required' },
-  passwordNotString: { error: 'Password must be a string' },
-  shortPassword: { error: 'Password must be longer than 7 characters' },
-  notToken: { error: 'Token not found' },
-  invalidToken: { error: 'Invalid token' },
-};
+import { DomainError, Message, StatusCode } from '../../errors';
 
 export const hasUsername = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (!newUser.username) return res.status(400).json(e.noUsername);
+  if (!newUser.username) {
+    return next(
+      new DomainError(StatusCode.badRequest, Message.noUsername),
+    );
+  }
   return next();
 };
 
 export const usernameIsString = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (isNotString(newUser.username)) return res.status(422).json(e.usernameNotString);
+  if (isNotString(newUser.username)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.usernameNotString),
+    );
+  }
   return next();
 };
 
 export const usernameNotShort = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (isShort(newUser.username, 2)) return res.status(422).json(e.shortUsername);
+  if (isShort(newUser.username, 2)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.shortUsername),
+    );
+  }
   return next();
 };
 
 export const hasClasse = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (!newUser.classe) return res.status(400).json(e.noClasse);
+  if (!newUser.classe) {
+    return next(
+      new DomainError(StatusCode.badRequest, Message.noClasse),
+    );
+  }
   return next();
 };
 
 export const classeIsString = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (isNotString(newUser.classe)) return res.status(422).json(e.classeNotString);
+  if (isNotString(newUser.classe)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.classeNotString),
+    );
+  }
   return next();
 };
 
 export const classeNotShort = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (isShort(newUser.classe, 2)) return res.status(422).json(e.shortClasse);
+  if (isShort(newUser.classe, 2)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.shortClasse),
+    );
+  }
   return next();
 };
 
 export const hasLevel = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (!newUser.level && newUser.level !== 0) return res.status(400).json(e.noLevel);
+  if (!newUser.level && newUser.level !== 0) {
+    return next(
+      new DomainError(StatusCode.badRequest, Message.noLevel),
+    );
+  }
   return next();
 };
 
 export const levelIsNumber = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (isNotNumber(newUser.level)) return res.status(422).json(e.levelNotNumber);
+  if (isNotNumber(newUser.level)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.levelNotNumber),
+    );
+  }
   return next();
 };
 
 export const levelIsPositive = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (isNotPositive(newUser.level)) return res.status(422).json(e.levelNotPositive);
+  if (isNotPositive(newUser.level)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.levelNotPositive),
+    );
+  }
   return next();
 };
 
 export const hasPassword = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (!newUser.password) return res.status(400).json(e.noPassword);
+  if (!newUser.password) {
+    return next(
+      new DomainError(StatusCode.badRequest, Message.noPassword),
+    );
+  }
   return next();
 };
 
 export const passwordIsString = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (isNotString(newUser.password)) return res.status(422).json(e.passwordNotString);
+  if (isNotString(newUser.password)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.passwordNotString),
+    );
+  }
   return next();
 };
 
 export const passwordNotShort = (req: Request, res: Response, next: NextFunction) => {
   const newUser: NewUser = req.body;
-  if (isShort(newUser.password, 7)) return res.status(422).json(e.shortPassword);
+  if (isShort(newUser.password, 7)) {
+    return next(
+      new DomainError(StatusCode.unprocessable, Message.shortPassword),
+    );
+  }
   return next();
 };
 
 export const hasToken = (req: Request, res: Response, next: NextFunction) => {
   const header = req.headers;
   const { authorization } = header;
-  if (!authorization) return res.status(401).json(e.notToken);
+  if (!authorization) {
+    return next(
+      new DomainError(StatusCode.unauthorized, Message.notToken),
+    );
+  }
   return next();
 };
 
@@ -114,7 +151,9 @@ export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
     );
     req.body = { ...req.body, decoded };
   } catch (err) {
-    return res.status(401).json(e.invalidToken);
+    return next(
+      new DomainError(StatusCode.unauthorized, Message.invalidToken),
+    );
   }
   return next();
 };

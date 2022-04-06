@@ -1,6 +1,8 @@
+import express from 'express';
+
 import 'dotenv/config';
 
-import express from 'express';
+import { ErrorHandler } from './middlewares/errors';
 
 import { userRouter, productRouter, orderRouter } from './routers';
 
@@ -13,5 +15,7 @@ app.use(userRouter);
 app.use(productRouter);
 
 app.use(orderRouter);
+
+app.use(ErrorHandler);
 
 export default app;
