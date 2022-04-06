@@ -1,19 +1,19 @@
 import { Error } from './user';
 
-export interface NewProduct {
+export interface INewProduct {
   name: string,
   amount: string,
 }
 
-export interface Product extends NewProduct {
+export interface IProduct extends INewProduct {
   id: number
 } 
 
-export interface ProductPayload {
-  item: Product,
+export interface IProductPayload {
+  item: IProduct,
 }
 
-export interface ProductErrors {
+export interface IProductErrors {
   noName: Error,
   nameNotString: Error,
   shortName: Error,

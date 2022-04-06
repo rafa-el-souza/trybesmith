@@ -1,11 +1,11 @@
-import { NewProduct } from '../interfaces';
+import { INewProduct } from '../interfaces';
 
 import {
   getAllProducts as modelGetAllProducts,
   createProduct as modelCreateProduct,
 } from '../models';
 
-export const createProduct = (newProduct: NewProduct) => modelCreateProduct(newProduct);
+export const createProduct = (newProduct: INewProduct) => modelCreateProduct(newProduct);
 
 export const getAllProducts = () => modelGetAllProducts();
 

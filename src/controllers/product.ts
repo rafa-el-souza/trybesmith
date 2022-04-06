@@ -5,17 +5,17 @@ import {
   getAllProducts as serviceGetAllProducts,
 } from '../services';
 
-import { NewProduct } from '../interfaces';
+import { INewProduct, IProduct, IProductPayload } from '../interfaces';
 
 export const createProduct = (req: Request, res: Response) => {
-  const newProduct: NewProduct = req.body;
+  const newProduct: INewProduct = req.body;
   serviceCreateProduct(newProduct)
-    .then((result) => res.status(201).json(result));
+    .then((result: IProductPayload) => res.status(201).json(result));
 };
 
 export const getAllProducts = (req: Request, res: Response) => {
   serviceGetAllProducts()
-    .then((result) => res.status(200).json(result));
+    .then((result: IProduct[]) => res.status(200).json(result));
 };
 
 export default {

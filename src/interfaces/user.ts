@@ -55,3 +55,14 @@ export interface Header extends IncomingHttpHeaders {
 export interface UpdatedRequest extends Request {
   decoded: string
 }
+
+export interface IId {
+  id: number
+}
+
+export interface IUsers {
+  username: string;
+  password: string;
+  level: number;
+  id: number
+}

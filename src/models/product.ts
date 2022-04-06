@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-import { NewProduct } from '../interfaces/product';
+import { INewProduct, IProduct } from '../interfaces';
 
 const prisma = new PrismaClient();
 
@@ -11,12 +11,12 @@ export const getAllProducts = () => prisma.products.findMany({
     amount: true,
   },
 })
-  .then((result) => result)
+  .then((result: IProduct[]) => result)
   .finally(async () => {
     await prisma.$disconnect();
   });
 
-export const createProduct = ({ name, amount }: NewProduct) => prisma.products.create({
+export const createProduct = ({ name, amount }: INewProduct) => prisma.products.create({
   data: { name, amount },
   select: {
     id: true,
@@ -24,7 +24,7 @@ export const createProduct = ({ name, amount }: NewProduct) => prisma.products.c
     amount: true,
   },
 })
-  .then((result) => ({ item: { ...result } }))
+  .then((result: IProduct) => ({ item: { ...result } }))
   .finally(async () => {
     await prisma.$disconnect();
   });
